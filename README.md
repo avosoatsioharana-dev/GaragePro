@@ -101,22 +101,3 @@ Pour les 15 ressources :
 - Les erreurs de validation renvoyées par Django REST Framework sont affichées dans le formulaire.
 
 Les routes API sont `/api/clients/`, `/api/vehicules/`, `/api/rendez-vous/`, `/api/interventions/`, `/api/pieces/`, `/api/factures/`, `/api/paiements/` et les autres routes déclarées dans `backend/garage/urls.py`.
-
-## 7. Déployer sur Render
-
-Render héberge le backend Django et le frontend React comme deux services distincts. La base MySQL doit être hébergée chez un fournisseur MySQL externe qui autorise les connexions depuis Render.
-
-1. Crée un dépôt Git et pousse le dossier `GaragePro` complet.
-2. Dans Render, crée un **Blueprint** depuis ce dépôt et sélectionne `render.yaml`, ou crée les services manuellement.
-3. Configure le service `garagepro-api` avec les variables MySQL fournies par ton hébergeur de base de données : `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`.
-4. Après création du service frontend, récupère son URL HTTPS et définis `CORS_ALLOWED_ORIGINS` sur le backend avec cette URL exacte, par exemple `https://garagepro-frontend.onrender.com`.
-5. Dans les variables du frontend, définis `VITE_API_URL` avec l’URL HTTPS du backend suivie de `/api`, par exemple `https://garagepro-api.onrender.com/api`.
-6. Redéploie les deux services. Vérifie `https://garagepro-api.onrender.com/api/health/`, puis ouvre l’URL frontend.
-
-Le fichier `render.yaml` génère les migrations de l’application au démarrage pour faciliter le premier déploiement. Pour un projet maintenu en équipe, génère les migrations localement avec `python manage.py makemigrations garage`, vérifie-les puis ajoute-les au dépôt Git.
-
-Les noms d’URL ci-dessus sont des exemples : utilise les URL réellement attribuées par Render. Ne publie jamais le mot de passe MySQL ni la `SECRET_KEY` dans le dépôt Git.
-
-## 8. Important avant une mise en production publique
-
-Ce projet est un point de départ pédagogique : les routes CRUD sont ouvertes (`AllowAny`) pour simplifier les tests. Avant d’y stocker des données réelles, ajoute une authentification, des permissions par rôle, une validation métier renforcée et une stratégie de sauvegarde MySQL. Les données financières doivent aussi être recalculées et validées côté serveur.
